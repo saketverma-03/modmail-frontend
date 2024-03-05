@@ -1,35 +1,23 @@
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import { signal } from "@preact/signals-react";
+import './App.css';
+import { useCollectionStore } from './store';
+import { Card } from './components/test';
 
 function App() {
-  const count = signal(0);
-  function updateCount() {
-    count.value += 1;
-  }
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={updateCount}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  );
+    const data = useCollectionStore((s) => s.collection);
+    const addNode = useCollectionStore((s) => s.addNode);
+    return (
+        <>
+            <div className="pt-8">
+                <h1 className="text-3xl font-bold text-center mb-8">
+                    Create Bot Like{' '}
+                </h1>
+                {data.map((item, idx) => {
+                    return <Card key={idx} idx={idx} items={item} />;
+                })}
+                <button onClick={addNode}>Add</button>
+            </div>
+        </>
+    );
 }
 
 export default App;
