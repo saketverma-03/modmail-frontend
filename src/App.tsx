@@ -10,10 +10,8 @@ import { useV2Store } from './v2/store';
 function App() {
     // const data = useCollectionStore((s) => s.collection);
     // const addNode = useCollectionStore((s) => s.addNode);
-    const data = useV2Store((s) => s.collection);
     return (
         <>
-            {data?.map((item) => <span>{item.message}</span>)}
             <SendBtn />
             <Tabs parentId="head" />
         </>

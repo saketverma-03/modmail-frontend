@@ -16,8 +16,11 @@ type State = {
 };
 
 type Actions = {
+    // node
     addNode: (id?: string) => void;
     updateNode: (newNode: TNode) => void;
+
+    // embeds
     addEmbed: (nodeId: string) => void;
     removeEmbed: (embedId: string) => void;
     updateEmbed: (embedId, newData) => void;

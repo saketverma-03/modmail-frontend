@@ -30,7 +30,7 @@ export const EmbedForm = ({ details }: { details: Embed }) => {
             fields: fields.map((f) => ({ name: f.name, value: f.value })),
         };
 
-        console.log(obj);
+        // console.log(obj);
         update(details.id, obj);
     }
     return (

@@ -19,24 +19,6 @@ function formateEmbed(e: Embed) {
     };
 }
 
-const useFN = () => {
-    const d = useV2Store((s) => s.collection);
-    const fn = (data: TNode, constData: TNode[]) => {
-        const newData = constData.filter((c) => c.id === data.id);
-        if (newData.length === 0) {
-            return data;
-        }
-
-        return {
-            message: data.message,
-            label: data.label,
-            button: newData.map((item) => useFN(item, constData)),
-        };
-    };
-    const x = fn({ label: 's', id: 'head', message: 'sas', parentId: 'ss' }, d);
-    return x;
-};
-
 /**
  
  message*
@@ -46,8 +28,7 @@ const useFN = () => {
  ]
  */
 
-export const SendBtn = () => {
-    const d = useV2Store((s) => s.collection);
+const useResObj = () => {
     const embeds = useV2Store((s) => s.embeds);
     const fn = (data: TNode, constData: TNode[]) => {
         const newData = constData.filter((c) => c.parentId === data.id);
@@ -63,12 +44,20 @@ export const SendBtn = () => {
         const obj = {
             message: data.message,
             label: data.label,
+
+            embeds: embeds.filter((e) => e.conNodeId === data.id),
             button: newData.map((item) => fn(item, constData)),
         };
         return obj;
     };
+    return [fn];
+};
+
+export const SendBtn = () => {
+    const collection = useV2Store((s) => s.collection);
+    const [fn] = useResObj();
     function handleOnSubmit() {
-        const x = fn({ label: 's', id: 'head', message: 'sas' }, d);
+        const x = fn({ label: 's', id: 'head', message: 'sas' }, collection);
         console.log('data', x);
     }
 
