@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 import { devtools } from 'zustand/middleware';
-import { Embed } from '../store/types';
+import { Embed } from './types';
 
 export type TNode = {
     id: string;
@@ -19,11 +19,12 @@ type Actions = {
     // node
     addNode: (id?: string) => void;
     updateNode: (newNode: TNode) => void;
+    removeNode: (nodeid: string) => void;
 
     // embeds
     addEmbed: (nodeId: string) => void;
     removeEmbed: (embedId: string) => void;
-    updateEmbed: (embedId, newData) => void;
+    updateEmbed: (embedId: string, newData: Embed) => void;
 };
 
 export const useV2Store = create<State & Actions>()(
@@ -62,6 +63,33 @@ export const useV2Store = create<State & Actions>()(
                 }
                 return { ...s, collection: temp };
             }),
+
+        removeNode: (id: string) =>
+            set((s) => {
+                let collection = s.collection.slice();
+                let embeds = s.embeds.slice();
+                embeds = embeds.filter((e) => e.conNodeId !== id);
+
+                // remvoe embeds of nodes that are childrens of our node
+                // NOTE: in case of performance issue this step can be ommited
+                // as res will ignore any embeds whose parentId does not exist
+                for (const i in collection) {
+                    if (collection[i].parentId === id) {
+                        embeds = embeds.filter(
+                            (e) => e.conNodeId !== collection[i].id
+                        );
+                    }
+                }
+
+                // remove all nodes with id=id or parentId = id
+                collection = collection.filter(
+                    (n) => n.id !== id && n.parentId !== id
+                );
+
+                return { ...s, embeds, collection };
+            }),
+
+        // Embeds
         addEmbed: (nodeId) =>
             set((s) => {
                 const newEmbed: Embed = {

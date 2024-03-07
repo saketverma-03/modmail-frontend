@@ -1,7 +1,8 @@
-import { FormEvent, useEffect, useRef, useState } from 'react';
-import { Embed, Field } from '../store/types';
+import { useRef, useState } from 'react';
+import { Embed } from '../store/types';
 import { cn } from '../utils';
-import { useV2Store } from '../v2/store';
+import { useV2Store } from '../store/store';
+import { ChevronDown, XCircle } from 'lucide-react';
 
 export const EmbedForm = ({ details }: { details: Embed }) => {
     const formRef = useRef<HTMLFormElement>();
@@ -9,12 +10,6 @@ export const EmbedForm = ({ details }: { details: Embed }) => {
     const remove = useV2Store((s) => s.removeEmbed);
     const update = useV2Store((s) => s.updateEmbed);
     const valueOf = (filed: string) => formRef.current[filed].value;
-    const [fields, setFileds] = useState<
-        { id: string; name: string; value: string }[]
-    >([]);
-    useEffect(() => {
-        handleSubmit();
-    }, [fields]);
 
     function handleSubmit() {
         const obj: Embed = {
@@ -27,7 +22,6 @@ export const EmbedForm = ({ details }: { details: Embed }) => {
             footerText: valueOf('footer-text'),
             timeStamp: valueOf('timestamp'),
             footerIconUrl: valueOf('footer-icon-url'),
-            fields: fields.map((f) => ({ name: f.name, value: f.value })),
         };
 
         // console.log(obj);
@@ -37,12 +31,22 @@ export const EmbedForm = ({ details }: { details: Embed }) => {
         <>
             <div className="flex">
                 <button
-                    className="hover:bg-primary/30 flex-1"
+                    className="hover:bg-primary/30 flex-1 bg-gray-950/70 flex gap-2 mr-1"
                     onClick={() => setShow((s) => !s)}
                 >
-                    show embed
+                    <span className="inline-block mr-auto ">Show Embed</span>{' '}
+                    <ChevronDown
+                        data-show={show}
+                        className='data-[show="true"]:rotate-180 transition-transform'
+                    />{' '}
                 </button>
-                <button onClick={() => remove(details.id)}>DELETE</button>
+                <button
+                    title="remove embed"
+                    className="opacity-70 hover:opacity-80 text-red-800 hover:bg-red-900/30"
+                    onClick={() => remove(details.id)}
+                >
+                    <XCircle />
+                </button>
             </div>
             <form
                 ref={formRef}
@@ -122,15 +126,14 @@ export const EmbedForm = ({ details }: { details: Embed }) => {
                             onBlur={handleSubmit}
                         />
                     </div>
-
-                    <button className="btn my-4 w-fit">Add fields</button>
                 </div>
             </form>
         </>
     );
 };
 
-const FieldForm = ({
+/**
+ const FieldForm = ({
     id,
     name,
     value,
@@ -167,3 +170,5 @@ const FieldForm = ({
         </>
     );
 };
+
+**/

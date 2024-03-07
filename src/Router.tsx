@@ -1,11 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
-import App from './App';
 import { AuthPage } from './Pages/Auth';
+import GeneratorPage from './Pages/Generator';
 
 export const router = createBrowserRouter([
     {
         path: '/',
-        element: <App />,
+        element: <GeneratorPage />,
     },
     {
         path: 'auth',

@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
-import { useV2Store } from './store';
-import { RadioGroup, Tab } from '@headlessui/react';
+import { useState } from 'react';
+import { useV2Store } from '../store/store';
+import { RadioGroup } from '@headlessui/react';
 import { cn } from '../utils';
 import { Card } from './Card';
+import { GitMergeIcon, PlusIcon } from 'lucide-react';
 
 export default function Tabs({ parentId }: { parentId: string }) {
     const subNodes = useV2Store((s) =>
@@ -10,11 +11,14 @@ export default function Tabs({ parentId }: { parentId: string }) {
     );
     const [selected, setSelected] = useState(subNodes[0]);
     const addNode = useV2Store((s) => s.addNode);
-    useEffect(() => {}, [selected]);
     if (subNodes.length === 0) {
         return (
-            <button className="bg-green-300" onClick={() => addNode(parentId)}>
-                Add Sub node
+            <button
+                className="flex gap-2 rounded-full border text-purple-300 hover:bg-purple-700 border-2 border-purple-600"
+                onClick={() => addNode(parentId)}
+            >
+                <GitMergeIcon />
+                <span className="inline-block">Add Buttons</span>
             </button>
         );
     }
@@ -24,11 +28,16 @@ export default function Tabs({ parentId }: { parentId: string }) {
             <TabBtn
                 items={subNodes}
                 value={selected}
+                key={parentId}
                 onChange={(v) => setSelected(v)}
                 onAddBtnClick={() => addNode(parentId)}
             />
-            {selected ? <Card key={selected.id} item={selected} /> : null}
-            {selected ? <Tabs parentId={selected.id} /> : null}
+            {selected ? (
+                <Card key={parentId + selected.id} item={selected} />
+            ) : null}
+            {selected ? (
+                <Tabs key={selected.id + parentId} parentId={selected.id} />
+            ) : null}
         </>
     );
 }
@@ -47,22 +56,23 @@ export function TabBtn({
     return (
         <RadioGroup value={value} onChange={onChange}>
             <RadioGroup.Label className="sr-only">Server size</RadioGroup.Label>
-            <div className="gap-2 flex">
+            <div className="gap-2 flex mt-12 mb-4">
                 <button
                     onClick={onAddBtnClick}
                     className="p-2 rounded-xl hover:bg-muted border"
                 >
-                    +
+                    <PlusIcon />
                 </button>
                 {items?.map((item) => (
                     <RadioGroup.Option
-                        key={item.label}
+                        key={item.id}
                         value={item}
                         className={({ checked }) =>
                             cn(
-                                'p-2 flex justify-center items-center rounded-xl hover:bg-muted border',
+                                'p-2 flex justify-center items-center rounded-xl hover:bg-muted border ',
                                 {
-                                    'bg-primary hover:bg-primary/80': checked,
+                                    'bg-purple-700 border-purple-500/60 hover:bg-purple-700/80':
+                                        checked,
                                 }
                             )
                         }

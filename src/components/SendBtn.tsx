@@ -1,7 +1,6 @@
 import { SaveIcon } from 'lucide-react';
-import { useCollectionStore } from '../store';
 import { Embed } from '../store/types';
-import { TNode, useV2Store } from '../v2/store';
+import { TNode, useV2Store } from '../store/store';
 
 function formateEmbed(e: Embed) {
     return {
@@ -19,35 +18,27 @@ function formateEmbed(e: Embed) {
     };
 }
 
-/**
- 
- message*
- able
- btn [
- {}
- ]
- */
-
 const useResObj = () => {
     const embeds = useV2Store((s) => s.embeds);
     const fn = (data: TNode, constData: TNode[]) => {
         const newData = constData.filter((c) => c.parentId === data.id);
         if (newData.length === 0) {
             return {
-                message: data.message,
-                label: data.label,
+                message: data?.message,
+                label: data?.label,
                 embeds: embeds.filter((e) => e.conNodeId === data.id),
                 button: undefined,
             };
         }
 
         const obj = {
-            message: data.message,
-            label: data.label,
+            message: data?.message,
+            label: data?.label,
 
             embeds: embeds.filter((e) => e.conNodeId === data.id),
             button: newData.map((item) => fn(item, constData)),
         };
+
         return obj;
     };
     return [fn];
@@ -57,7 +48,7 @@ export const SendBtn = () => {
     const collection = useV2Store((s) => s.collection);
     const [fn] = useResObj();
     function handleOnSubmit() {
-        const x = fn({ label: 's', id: 'head', message: 'sas' }, collection);
+        const x = fn({ label: '', id: 'head', message: '' }, collection);
         console.log('data', x);
     }
 
