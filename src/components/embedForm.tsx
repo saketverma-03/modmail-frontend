@@ -1,29 +1,21 @@
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { Embed, Field } from '../store/types';
 import { cn } from '../utils';
-import { useCollectionStore } from '../store';
+import { useV2Store } from '../v2/store';
 
 export const EmbedForm = ({ details }: { details: Embed }) => {
     const formRef = useRef<HTMLFormElement>();
     const [show, setShow] = useState(false);
-    const remove = useCollectionStore((s) => s.removeEmbed);
-    const update = useCollectionStore((s) => s.updateEmbed);
+    const remove = useV2Store((s) => s.removeEmbed);
+    const update = useV2Store((s) => s.updateEmbed);
     const valueOf = (filed: string) => formRef.current[filed].value;
-    const [fields,setFileds] = useState<{id: string,name:string,value:string}[]>([])
-  useEffect(() => {
-    handleSubmit()
-  } ,[fields])
+    const [fields, setFileds] = useState<
+        { id: string; name: string; value: string }[]
+    >([]);
+    useEffect(() => {
+        handleSubmit();
+    }, [fields]);
 
-  function handleUpdateFileds(field:{id: string,name:string,value:string}){
-        const temp = fields.map( f => {
-      if(field.id !== f.id)
-        return f;
-      return field
-    })
-    setFileds(temp)
-  }
-
-  
     function handleSubmit() {
         const obj: Embed = {
             id: details.id,
@@ -35,7 +27,7 @@ export const EmbedForm = ({ details }: { details: Embed }) => {
             footerText: valueOf('footer-text'),
             timeStamp: valueOf('timestamp'),
             footerIconUrl: valueOf('footer-icon-url'),
-        fields: fields.map( f => ({name: f.name, value: f.value})),
+            fields: fields.map((f) => ({ name: f.name, value: f.value })),
         };
 
         console.log(obj);
@@ -132,26 +124,46 @@ export const EmbedForm = ({ details }: { details: Embed }) => {
                     </div>
 
                     <button className="btn my-4 w-fit">Add fields</button>
-          {details.fields?.map( filed =>  )}
                 </div>
             </form>
         </>
     );
 };
 
-const Field = ({id,name,value,handleUpdate}:{id:string,name:string,value:string,handleUpdate: (data:Field) => string) => {
-  const nameRef = useRef()
-  const valRef = useRef()
-  function handleChange(){
-    handleUpdate({id: id,name: nameRef.current?.ref,value:valRef.current?.value})
-  }
+const FieldForm = ({
+    id,
+    name,
+    value,
+    handleUpdate,
+}: {
+    id: string;
+    name: string;
+    value: string;
+    handleUpdate: any;
+}) => {
+    const nameRef = useRef();
+    const valRef = useRef();
 
-  return <>
-<div className='grid grid-cols-2'>
-      <label htmlFor="">Name</label>
-      <label htmlFor="">Value</label>
-<input type="text" ref={nameRef} placeholder='Ashok' defaultValue={name} onBlur={handleChange}/> 
-<input type="text" ref={valRef} placeholder='cant dance' defaultValue={value} onBlur={handleChange} /> 
-    </div>
-  </>
-}
+    return (
+        <>
+            <div className="grid grid-cols-2">
+                <label htmlFor="">Name</label>
+                <label htmlFor="">Value</label>
+                <input
+                    type="text"
+                    ref={nameRef}
+                    placeholder="Ashok"
+                    defaultValue={name}
+                    onBlur={handleChange}
+                />
+                <input
+                    type="text"
+                    ref={valRef}
+                    placeholder="cant dance"
+                    defaultValue={value}
+                    onBlur={handleChange}
+                />
+            </div>
+        </>
+    );
+};
