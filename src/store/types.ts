@@ -1,14 +1,3 @@
-export type Collection = CollectionItem[];
-
-export type CollectionItem = ContainerNode[];
-
-export type ContainerNode = {
-    id: string;
-    title: string;
-    content: string;
-    attachments?: string;
-};
-
 export type Embed = {
     id: string;
     conNodeId: string;
@@ -16,7 +5,10 @@ export type Embed = {
     description?: string; // 0-4096
     url?: string;
     color?: string;
+
     imageUrl?: string;
+    thumbnailUrl?: string;
+    // footer content
     footer?: string; // 0-2048
     footerIconUrl?: string;
     timeStamp?: string;

@@ -1,12 +1,12 @@
 import { cn } from '../utils';
-import { useV2Store } from '../store/store';
+import { TNode, useV2Store } from '../store/store';
 import { EmbedForm } from './embedForm';
 import { ListPlus, Trash, Trash2 } from 'lucide-react';
 
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 
-export default function MyModal({ idToRemove }: { id: string }) {
+export default function MyModal({ idToRemove }: { idToRemove: string }) {
     const [isOpen, setIsOpen] = useState(false);
     const remove = useV2Store((s) => s.removeNode);
 
@@ -56,15 +56,12 @@ export default function MyModal({ idToRemove }: { id: string }) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="bg-gradient-to-br from-red-950/60 to-yellow-950/40 backdrop-blur-xl p-8 pb-6 rounded-xl text-left  max-w-sm">
+                                <Dialog.Panel className="bg-card bg-gradient-to-br from-red-950/60 to-yellow-950/40 backdrop-blur-xl p-8 pb-6 rounded-xl text-left  max-w-sm">
                                     <Dialog.Title
                                         as="h3"
                                         className="text-xl font-medium leading-6 "
                                     >
                                         Delete Permenantely
-                                        <span className="bg-red-950/40 mt-2  text-red-300 block w-fit rounded-full py-1 px-2 border border-red-950 text-xs">
-                                            Destructive Action
-                                        </span>
                                     </Dialog.Title>
                                     <div className="mt-2">
                                         <p className="text-sm text-white/70">
@@ -76,8 +73,8 @@ export default function MyModal({ idToRemove }: { id: string }) {
 
                                     <div className="mt-6 grid grid-cols-2 gap-2">
                                         <button
-                                            onClick={closeModal}
-                                            className=" hover:bg-purple-800"
+                                            onClick={() => setIsOpen(false)}
+                                            className=" hover:bg-primary/80"
                                         >
                                             cancel
                                         </button>
@@ -99,7 +96,7 @@ export default function MyModal({ idToRemove }: { id: string }) {
     );
 }
 
-export const Card = ({ item }: { item: any }) => {
+export const Card = ({ item }: { item: TNode }) => {
     const [title, setTitle] = useState(item.label);
     const update = useV2Store((s) => s.updateNode);
     const embeds = useV2Store((s) =>
@@ -143,7 +140,7 @@ export const Card = ({ item }: { item: any }) => {
                     onBlur={(e) => handleOnBlur()}
                 ></textarea>
                 <button
-                    className="bg-green-900/50 hover:bg-green-900 shadow-sm "
+                    className="bg-green-900 hover:bg-green-900/80 shadow-sm "
                     onClick={() => addEmbed(item.id)}
                 >
                     <ListPlus /> Add Embed

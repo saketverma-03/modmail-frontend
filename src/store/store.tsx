@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 import { devtools } from 'zustand/middleware';
 import { Embed } from './types';
+import { getRandomValue } from '../randomList';
 
 export type TNode = {
     id: string;
@@ -10,12 +11,12 @@ export type TNode = {
     label?: string;
 };
 
-type State = {
+export type State = {
     collection: TNode[];
     embeds: Embed[];
 };
 
-type Actions = {
+export type Actions = {
     // node
     addNode: (id?: string) => void;
     updateNode: (newNode: TNode) => void;
@@ -31,8 +32,13 @@ export const useV2Store = create<State & Actions>()(
     devtools((set) => ({
         collection: [
             {
-                label: 'default',
-                message: 'saket',
+                label: getRandomValue().label,
+                message: getRandomValue().message,
+                id: 'head',
+            },
+            {
+                label: getRandomValue().label,
+                message: getRandomValue().message,
                 parentId: 'head',
                 id: crypto.randomUUID(),
             },
@@ -45,9 +51,9 @@ export const useV2Store = create<State & Actions>()(
                 }
                 const temp = s.collection.slice();
                 temp.push({
-                    label: 'default label',
+                    label: getRandomValue().label,
                     id: crypto.randomUUID(),
-                    message: 'hellow owrld',
+                    message: getRandomValue().message,
                     parentId: id,
                 });
                 return { ...s, collection: temp };

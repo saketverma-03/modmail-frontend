@@ -8,7 +8,7 @@ export const router = createBrowserRouter([
         element: <GeneratorPage />,
     },
     {
-        path: 'auth',
+        path: 'modmail',
         element: <AuthPage />,
     },
 ]);

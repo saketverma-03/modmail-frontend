@@ -3,6 +3,22 @@ import { Embed } from '../store/types';
 import { cn } from '../utils';
 import { useV2Store } from '../store/store';
 import { ChevronDown, XCircle } from 'lucide-react';
+import { z as t } from 'zod';
+import { Value } from '@sinclair/typebox/value';
+
+const validator = t.object({
+    id: t.string(),
+    conNodeId: t.string(),
+    title: t.optional(t.string()),
+    description: t.optional(t.string()),
+    url: t.optional(t.string().url('Field url must be of type url')),
+    color: t.optional(t.string()),
+    imageUrl: t.optional(t.string()),
+    thumbnailUrl: t.optional(t.string()),
+    footer: t.optional(t.string()),
+    footerIconUrl: t.optional(t.string()),
+    timeStamp: t.optional(t.string()),
+});
 
 export const EmbedForm = ({ details }: { details: Embed }) => {
     const formRef = useRef<HTMLFormElement>();
@@ -15,16 +31,22 @@ export const EmbedForm = ({ details }: { details: Embed }) => {
         const obj: Embed = {
             id: details.id,
             conNodeId: details.conNodeId,
-            title: valueOf('title'),
-            description: valueOf('disc'),
-            color: valueOf('color'),
-            url: valueOf('url'),
-            footerText: valueOf('footer-text'),
-            timeStamp: valueOf('timestamp'),
-            footerIconUrl: valueOf('footer-icon-url'),
+            title: valueOf('title') || undefined,
+            description: valueOf('disc') || undefined,
+            color: valueOf('color') || undefined,
+            url: valueOf('url') || undefined,
+            footer: valueOf('footer-text') || undefined,
+            timeStamp: valueOf('timestamp') || undefined,
+            footerIconUrl: valueOf('footer-icon-url') || undefined,
+            imageUrl: valueOf('img-url') || undefined,
+            thumbnailUrl: valueOf('thumb-url') || undefined,
         };
 
         // console.log(obj);
+        const a = validator.parse(obj);
+
+        console.log({ a });
+        console.log(document.getElementById('title'));
         update(details.id, obj);
     }
     return (
@@ -66,17 +88,18 @@ export const EmbedForm = ({ details }: { details: Embed }) => {
                         onBlur={handleSubmit}
                     />
                     <label htmlFor="disc" className="mt-4 mb-2">
-                        Discription
+                        Content
                     </label>
                     <textarea
                         name="disc"
                         id="disc"
                         defaultValue={details?.description}
+                        placeholder="Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat."
                         onBlur={handleSubmit}
                         cols={30}
                         rows={10}
                     ></textarea>
-                    <div className="grid grid-cols-2">
+                    <div className="grid grid-cols-2 gap-1">
                         <label className="embed-label" htmlFor="">
                             {' '}
                             url
@@ -100,6 +123,27 @@ export const EmbedForm = ({ details }: { details: Embed }) => {
                             onBlur={handleSubmit}
                         />
                     </div>
+                    {/*image & thumbnail*/}
+
+                    <div title="footer" className="grid grid-cols-2 gap-1">
+                        <label htmlFor="" className="embed-label">
+                            Image url{' '}
+                        </label>
+
+                        <label htmlFor="" className="embed-label">
+                            Thumbnail url
+                        </label>
+                        <input id="img-url" type="url" onBlur={handleSubmit} />
+
+                        <input
+                            type="datetime-local"
+                            id="thumb-url"
+                            type="url"
+                            onBlur={handleSubmit}
+                        />
+                    </div>
+
+                    {/*Footer*/}
                     <div title="footer" className="grid grid-cols-2 gap-1">
                         <label htmlFor="" className="col-span-2 embed-label">
                             Footer Text
@@ -112,7 +156,7 @@ export const EmbedForm = ({ details }: { details: Embed }) => {
                             className="col-span-2"
                         />
                         <label htmlFor="" className="embed-label">
-                            Image url
+                            Footer Icon
                         </label>
 
                         <label htmlFor="" className="embed-label">
@@ -121,7 +165,7 @@ export const EmbedForm = ({ details }: { details: Embed }) => {
                         <input id="footer-icon-url" onBlur={handleSubmit} />
 
                         <input
-                            type="date"
+                            type="datetime-local"
                             id="timestamp"
                             onBlur={handleSubmit}
                         />

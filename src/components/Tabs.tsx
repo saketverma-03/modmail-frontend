@@ -59,7 +59,7 @@ export function TabBtn({
             <div className="gap-2 flex mt-12 mb-4">
                 <button
                     onClick={onAddBtnClick}
-                    className="p-2 rounded-xl hover:bg-muted border"
+                    className="p-2 rounded-xl hover:primary/20 border"
                 >
                     <PlusIcon />
                 </button>
@@ -69,7 +69,7 @@ export function TabBtn({
                         value={item}
                         className={({ checked }) =>
                             cn(
-                                'p-2 flex justify-center items-center rounded-xl hover:bg-muted border ',
+                                'p-2 flex justify-center items-center bg-primary/10 rounded-xl hover:bg-primary/20 border ',
                                 {
                                     'bg-purple-700 border-purple-500/60 hover:bg-purple-700/80':
                                         checked,
