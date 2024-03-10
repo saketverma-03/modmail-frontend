@@ -1,7 +1,7 @@
 import { cn } from '../utils';
 import { TNode, useV2Store } from '../store/store';
 import { EmbedForm } from './embedForm';
-import { ListPlus, Trash, Trash2 } from 'lucide-react';
+import { ListPlus, Trash } from 'lucide-react';
 
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
@@ -137,7 +137,7 @@ export const Card = ({ item }: { item: TNode }) => {
                     rows={10}
                     defaultValue={content}
                     onChange={(e) => setContent(e.target.value)}
-                    onBlur={(e) => handleOnBlur()}
+                    onBlur={() => handleOnBlur()}
                 ></textarea>
                 <button
                     className="bg-green-900 hover:bg-green-900/80 shadow-sm "

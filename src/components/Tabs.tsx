@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useV2Store } from '../store/store';
+import { TNode, useV2Store } from '../store/store';
 import { RadioGroup } from '@headlessui/react';
 import { cn } from '../utils';
 import { Card } from './Card';
@@ -29,7 +29,7 @@ export default function Tabs({ parentId }: { parentId: string }) {
                 items={subNodes}
                 value={selected}
                 key={parentId}
-                onChange={(v) => setSelected(v)}
+                onChange={(v) => setSelected(v as TNode)}
                 onAddBtnClick={() => addNode(parentId)}
             />
             {selected ? (
@@ -48,7 +48,7 @@ export function TabBtn({
     onChange,
     onAddBtnClick,
 }: {
-    items: { parentId: string; id: string; message: string }[];
+    items: TNode[];
     value: unknown;
     onChange?: (value: unknown) => void;
     onAddBtnClick?: () => void;

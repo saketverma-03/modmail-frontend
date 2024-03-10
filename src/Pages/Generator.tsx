@@ -30,9 +30,10 @@ function GeneratorPage() {
                 <div className="p-16 flex gap-8 flex-col items-center">
                     <Card
                         item={{
-                            message: headCardData?.message,
+                            message: headCardData?.message || '',
                             id: 'head',
                             label: headCardData?.label,
+                            parentId: '',
                         }}
                     />
                     <Tabs parentId="head" />

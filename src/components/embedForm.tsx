@@ -4,7 +4,6 @@ import { cn } from '../utils';
 import { useV2Store } from '../store/store';
 import { ChevronDown, XCircle } from 'lucide-react';
 import { z as t } from 'zod';
-import { Value } from '@sinclair/typebox/value';
 
 const validator = t.object({
     id: t.string(),
@@ -21,7 +20,7 @@ const validator = t.object({
 });
 
 export const EmbedForm = ({ details }: { details: Embed }) => {
-    const formRef = useRef<HTMLFormElement>();
+    const formRef = useRef<any>();
     const [show, setShow] = useState(false);
     const remove = useV2Store((s) => s.removeEmbed);
     const update = useV2Store((s) => s.updateEmbed);
