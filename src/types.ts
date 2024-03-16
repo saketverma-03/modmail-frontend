@@ -1,3 +1,6 @@
+import { retry } from 'wretch/middlewares';
+import { Embed as TEmbeds } from './store/types.ts';
+
 export type Embed = {
     title?: string; // 256 character limit
     description?: string; // 4096 character limit
@@ -59,3 +62,61 @@ export type Button = {
     emoji: string;
     style: string;
 };
+export type TNode = {
+    id: string;
+    parentId: string;
+    message: string;
+    label?: string;
+};
+
+//const node: TNode[] = [];
+//let embeds: TEmbeds[] = [];
+export function transformEmbeds(e: Embed, parentId: string): TEmbeds {
+    console.log('remaping embed');
+    return {
+        title: e.title,
+        id: crypto.randomUUID(),
+        url: e.url,
+        color: e.color,
+        footer: e.footer?.text,
+        footerIconUrl: e.footer?.text,
+        timeStamp: e.timestamp,
+        imageUrl: e.image?.url,
+        description: e.description,
+        thumbnailUrl: e.thumbnail?.url,
+        conNodeId: parentId,
+    };
+}
+export function mapResponse(b: Button[], parentId: string, node, embeds) {
+    console.log({ fromFn: b });
+    if (!b) {
+        // console.log({ node, embeds });
+        return;
+    }
+    b.map((i) => {
+        const thisId = crypto.randomUUID();
+        console.log({ ik: i.linkedComponent.embeds });
+        node.push({
+            id: thisId,
+            parentId: parentId,
+            label: i.label,
+            message: i.linkedComponent.message.content,
+        });
+        // reformamte embeds
+        const newEmbes = i.linkedComponent.embeds?.map((e) => {
+            // console.log('here');
+            return transformEmbeds(e, thisId);
+        });
+        // console.log({ newEmbes });
+        if (newEmbes) {
+            newEmbes.forEach((e) => embeds.push(e));
+            // embeds = [...embeds, ...newEmbes];
+            console.log({ embeds });
+        }
+        if (i.linkedComponent.button) {
+            mapResponse(i.linkedComponent.button, thisId, node, embeds);
+        }
+    });
+
+    //  console.log({ node, embeds });
+}

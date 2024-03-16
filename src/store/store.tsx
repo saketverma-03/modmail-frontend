@@ -17,6 +17,8 @@ export type State = {
 };
 
 export type Actions = {
+    //
+    init: (node: TNode[], embeds: Embed[]) => void;
     // node
     addNode: (id?: string) => void;
     updateNode: (newNode: TNode) => void;
@@ -35,6 +37,7 @@ export const useV2Store = create<State & Actions>()(
                 label: getRandomValue().label,
                 message: getRandomValue().message,
                 id: 'head',
+                parentId: '',
             },
             {
                 label: getRandomValue().label,
@@ -44,6 +47,10 @@ export const useV2Store = create<State & Actions>()(
             },
         ],
         embeds: [],
+        init: (node, embeds) =>
+            set((s) => {
+                return { ...s, collection: node, embeds: embeds };
+            }),
         addNode: (id) =>
             set((s) => {
                 if (!id) {

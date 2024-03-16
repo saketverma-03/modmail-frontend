@@ -1,22 +1,28 @@
 import { SaveIcon } from 'lucide-react';
 import { Embed } from '../store/types';
+import { Embed as ResEmbed } from '../types';
 import { TNode, useV2Store } from '../store/store';
 
 function formateEmbed(E: Embed[]) {
     // console.log({ E });
-    return E.map((e) => {
+    return E.map((e): ResEmbed => {
         return {
             title: e.title,
             description: e.description,
             url: e.url,
             timestamp: e.timeStamp,
+            //@ts-ignore
             color: e.color,
             footer: {
-                text: e.footer,
-                iconUrl: e.footerIconUrl,
+                text: e.footer || '',
+                iconURL: e.footerIconUrl,
             },
-            image: e.imageUrl,
-            thumbnail: e.thumbnailUrl,
+            image: {
+                url: e.imageUrl,
+            },
+            thumbnail: {
+                url: e.thumbnailUrl,
+            },
         };
     });
 }
@@ -75,8 +81,8 @@ export const SendBtn = () => {
     function handleOnSubmit() {
         const x = fn({ label: '', id: 'head', message: '' }, collection);
         const res = {
-            archiveChannelId: 'saket',
-            modmailCategoryId: 'sakt',
+            archiveChannelId: 'saket123',
+            modmailCategoryId: 'saket123',
             aiSupport: false,
             initialMessage: {
                 message: {
