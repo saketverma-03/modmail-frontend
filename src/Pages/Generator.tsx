@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { getConfigOfuser } from '../api';
 import { Card } from '../components/Card';
 import { SendBtn } from '../components/SendBtn';
@@ -21,6 +20,8 @@ function GeneratorPage() {
         queryKey: ['init'],
         queryFn: async () => {
             const { node, embeds } = await getConfigOfuser(api);
+
+            // set data from backend into the store
             init(node, embeds);
         },
     });
@@ -34,6 +35,7 @@ function GeneratorPage() {
                 {!isLoading ? (
                     <>
                         <div className="p-16 flex gap-8 flex-col items-center">
+                            {/*Render Head Card*/}
                             <Card
                                 item={{
                                     message: headCardData?.message || '',
@@ -42,6 +44,7 @@ function GeneratorPage() {
                                     parentId: '',
                                 }}
                             />
+                            {/*Render other Cards*/}
                             <Tabs parentId="head" />
                         </div>
                     </>

@@ -57,6 +57,7 @@ const useResObj = () => {
                 message: {
                     content: buttons?.message,
                     embeds: e,
+                    attachments: buttons?.attachments,
                     // embeds: embeds.filter((e) => e.conNodeId === data.id),
                 },
                 button: newData.map((item) => fn(item, allBtns)),
@@ -88,12 +89,13 @@ export const SendBtn = () => {
                 message: {
                     content: headNodeData?.message, //TODO:
                     embeds: embeds, // TODO:
+                    attachments: headNodeData?.attachments,
                 },
 
                 buttons: x.linkedComponent.button,
             },
         };
-        console.log('data', res.initialMessage);
+        console.log('data', res);
         const myHeaders = new Headers();
         myHeaders.append('accept', '*/*');
         myHeaders.append('Content-Type', 'application/json');

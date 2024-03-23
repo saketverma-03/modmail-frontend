@@ -9,11 +9,13 @@ export type TNode = {
     parentId: string;
     message: string;
     label?: string;
+    attachments: string[];
 };
 
 export type State = {
     collection: TNode[];
     embeds: Embed[];
+    attachments: string[];
 };
 
 export type Actions = {
@@ -38,15 +40,18 @@ export const useV2Store = create<State & Actions>()(
                 message: getRandomValue().message,
                 id: 'head',
                 parentId: '',
+                attachments: [],
             },
             {
                 label: getRandomValue().label,
                 message: getRandomValue().message,
                 parentId: 'head',
                 id: crypto.randomUUID(),
+                attachments: [],
             },
         ],
         embeds: [],
+        attachments: [],
         init: (node, embeds) =>
             set((s) => {
                 return { ...s, collection: node, embeds: embeds };
@@ -62,6 +67,7 @@ export const useV2Store = create<State & Actions>()(
                     id: crypto.randomUUID(),
                     message: getRandomValue().message,
                     parentId: id,
+                    attachments: [],
                 });
                 return { ...s, collection: temp };
             }),

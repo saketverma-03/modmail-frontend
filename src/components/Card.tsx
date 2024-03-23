@@ -1,10 +1,10 @@
 import { cn } from '../utils';
 import { TNode, useV2Store } from '../store/store';
 import { EmbedForm } from './embedForm';
-import { ListPlus, Trash } from 'lucide-react';
+import { Bookmark, ChevronDown, ListPlus, Trash, XCircle } from 'lucide-react';
 
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 export default function MyModal({ idToRemove }: { idToRemove: string }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -97,15 +97,40 @@ export default function MyModal({ idToRemove }: { idToRemove: string }) {
 }
 
 export const Card = ({ item }: { item: TNode }) => {
-    const [title, setTitle] = useState(item.label);
     const update = useV2Store((s) => s.updateNode);
     const embeds = useV2Store((s) =>
         s.embeds.filter((e) => e.conNodeId === item.id)
     );
     const addEmbed = useV2Store((s) => s.addEmbed);
+
+    const [title, setTitle] = useState(item.label);
     const [content, setContent] = useState(item.message);
+    const [atchs, setAtchs] = useState<string[]>(
+        item.attachments ? item.attachments : []
+    );
+
+    useEffect(() => {
+        handleOnBlur();
+    }, [atchs]);
+
+    function handleUpdateAttachment(idx: number, value: string) {
+        setAtchs((a) => {
+            const temp = a.slice();
+            temp[idx] = value;
+            return temp;
+        });
+    }
+    function handleAddAttachment() {
+        setAtchs((a) => [...a, 'https://example.com']);
+    }
+    function removeAttachment(idx: number) {
+        setAtchs((a) => {
+            const temp = a.filter((_, i) => i !== idx);
+            return temp;
+        });
+    }
     function handleOnBlur() {
-        update({ ...item, label: title, message: content });
+        update({ ...item, label: title, message: content, attachments: atchs });
     }
 
     return (
@@ -140,12 +165,64 @@ export const Card = ({ item }: { item: TNode }) => {
                     onBlur={() => handleOnBlur()}
                 ></textarea>
                 <button
-                    className="bg-green-900 hover:bg-green-900/80 shadow-sm "
+                    className="bg-green-900 gap-2 hover:bg-green-900/80 shadow-sm "
+                    onClick={() => handleAddAttachment()}
+                >
+                    <Bookmark /> Add Attachments
+                </button>
+                <input
+                    type="checkbox"
+                    id="showAttachments"
+                    value={'lol'}
+                    defaultChecked={false}
+                    className="peer/toogle hidden"
+                />
+                {atchs.length !== 0 && (
+                    <label
+                        htmlFor="showAttachments"
+                        className="px-4 py-3 rounded-xl bg-black/70 flex items-center"
+                    >
+                        Shoe Attachments
+                        <span className="ml-auto">
+                            <ChevronDown className="peer-checked/toogle:bg-red-700" />
+                        </span>
+                    </label>
+                )}
+                <div className="peer-checked/toogle:flex flex-col gap-2 transition-all  hidden">
+                    {atchs?.map((item, idx) => {
+                        return (
+                            <div className="flex gap-1">
+                                <input
+                                    type="text"
+                                    defaultValue={item}
+                                    className="flex-1 "
+                                    key={idx + item}
+                                    onBlur={(e) =>
+                                        handleUpdateAttachment(
+                                            idx,
+                                            e.target.value
+                                        )
+                                    }
+                                />
+                                <button
+                                    title="remove embed"
+                                    className="opacity-70 hover:opacity-80 text-red-800 hover:bg-red-900/30"
+                                    onClick={() => removeAttachment(idx)}
+                                >
+                                    <XCircle />
+                                </button>
+                            </div>
+                        );
+                    })}
+                </div>
+                <button
+                    className="bg-green-900 gap-2 hover:bg-green-900/80 shadow-sm "
                     onClick={() => addEmbed(item.id)}
                 >
                     <ListPlus /> Add Embed
                 </button>
 
+                {/* Render Embeds */}
                 <div className="grid gap-2 ">
                     {embeds?.map((item) => <EmbedForm details={item} />)}
                 </div>

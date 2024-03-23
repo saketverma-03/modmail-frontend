@@ -1,10 +1,11 @@
-import { useRef, useState } from 'react';
-import { Embed } from '../store/types';
+import { useEffect, useRef, useState } from 'react';
+import { Attachments, Embed } from '../store/types';
 import { cn } from '../utils';
 import { useV2Store } from '../store/store';
-import { ChevronDown, XCircle } from 'lucide-react';
+import { ChevronDown, Plug2, PlusIcon, Trash, XCircle } from 'lucide-react';
 import { z as t } from 'zod';
 
+// TODO: implement validation
 const validator = t.object({
     id: t.string(),
     conNodeId: t.string(),
@@ -20,7 +21,7 @@ const validator = t.object({
 });
 
 export const EmbedForm = ({ details }: { details: Embed }) => {
-    const formRef = useRef<any>();
+    const formRef = useRef();
     const [show, setShow] = useState(false);
     const remove = useV2Store((s) => s.removeEmbed);
     const update = useV2Store((s) => s.updateEmbed);
@@ -41,11 +42,10 @@ export const EmbedForm = ({ details }: { details: Embed }) => {
             thumbnailUrl: valueOf('thumb-url') || undefined,
         };
 
-        // console.log(obj);
-        const a = validator.parse(obj);
+        // const a = validator.parse(obj);
 
-        console.log({ a });
-        console.log(document.getElementById('title'));
+        // console.log({ a });
+        // console.log(document.getElementById('title'));
         update(details.id, obj);
     }
     return (
@@ -169,6 +169,11 @@ export const EmbedForm = ({ details }: { details: Embed }) => {
                             onBlur={handleSubmit}
                         />
                     </div>
+                </div>
+                <h3 className="mt-6 mb-4 text-xl ml-2">Attachments</h3>
+                <div className="grid grid-cols-2 gap-2 my-2">
+                    <label htmlFor="Title">title</label>
+                    <label htmlFor="Title">discription</label>
                 </div>
             </form>
         </>

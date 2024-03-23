@@ -32,9 +32,11 @@ export default function Tabs({ parentId }: { parentId: string }) {
                 onChange={(v) => setSelected(v as TNode)}
                 onAddBtnClick={() => addNode(parentId)}
             />
+            {/* Render selected card */}
             {selected ? (
                 <Card key={parentId + selected.id} item={selected} />
             ) : null}
+            {/* child btns of the selected card */}
             {selected ? (
                 <Tabs key={selected.id + parentId} parentId={selected.id} />
             ) : null}

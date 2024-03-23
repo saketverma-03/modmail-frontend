@@ -101,6 +101,7 @@ export function mapResponse(b: Button[], parentId: string, node, embeds) {
             parentId: parentId,
             label: i.label,
             message: i.linkedComponent.message.content,
+            attachments: i.linkedComponent.message.attachments,
         });
         // reformamte embeds
         const newEmbes = i.linkedComponent.embeds?.map((e) => {

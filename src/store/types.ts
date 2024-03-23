@@ -12,10 +12,11 @@ export type Embed = {
     footer?: string; // 0-2048
     footerIconUrl?: string;
     timeStamp?: string;
-    fields?: Map<string, field>;
+    // attachments: Attachments[];
 };
 
-export type field = {
-    name: string; // 0-256
-    value: string; // 0-1024
+export type Attachments = {
+    id: strings;
+    title: string;
+    url: string;
 };
