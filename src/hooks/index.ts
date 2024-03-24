@@ -30,7 +30,14 @@ export const useLocalStorage = (key: string) => {
 };
 export const useApi = () => {
     const { getItem } = useLocalStorage('auth');
+
     const naviate = useNavigate();
+
+    // if no toke then redirect to auth flow
+    if (!getItem()) {
+        naviate('/')
+
+    }
     const api = wretch('http://localhost:3000', {
         mode: 'cors',
     })

@@ -20,7 +20,8 @@ export async function getConfigOfuser(api: Wretch) {
         parentId: '',
     });
 
-    const d = mapResponse(
+    // mutating data
+    mapResponse(
         res.data.initialMessage.buttons,
         'head',
         node,

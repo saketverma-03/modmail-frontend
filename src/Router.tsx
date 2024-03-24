@@ -5,10 +5,12 @@ import GeneratorPage from './Pages/Generator';
 export const router = createBrowserRouter([
     {
         path: '/',
-        element: <GeneratorPage />,
+        element: <AuthPage />,
     },
     {
         path: 'modmail',
-        element: <AuthPage />,
+        element: <GeneratorPage />,
     },
 ]);
+
+// domain.com?token="dasdasdas"

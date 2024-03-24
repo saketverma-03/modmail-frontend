@@ -21,9 +21,10 @@ export function AuthPage() {
     useEffect(() => {
         if (isSuccess) {
             setItem(params.get('token'));
-            navigate('/');
+            navigate('/modmail');
         }
     }, [isSuccess]);
+
     return (
         <>
             <div className="h-[100vh] w-full flex justify-center items-center">
@@ -34,12 +35,14 @@ export function AuthPage() {
                     </div>
                 )}
                 {isError && (
-                    <div className="flex gap-2 text-red-600">
+                    <div className="flex gap-2 bg-red-950/30 p-16 text-red-400 rounded-xl">
                         <XCircle />
-                        <h1>Failed to Authenticate</h1>
+                        <h1>Failed to Authenticate, Please Generate a new link through discord bot</h1>
                     </div>
                 )}
             </div>
         </>
     );
 }
+
+
