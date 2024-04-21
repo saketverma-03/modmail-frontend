@@ -61,7 +61,7 @@ const useResObj = () => {
                     attachments: buttons?.attachments,
                     // embeds: embeds.filter((e) => e.conNodeId === data.id),
                 },
-                button: newData.map((item) => fn(item, allBtns)),
+                buttons: newData.map((item) => fn(item, allBtns)),
             },
         };
 
@@ -90,7 +90,7 @@ export const SendBtn = () => {
                     attachments: headNodeData?.attachments,
                 },
 
-                buttons: x.linkedComponent.button,
+                buttons: x.linkedComponent.buttons,
             },
         };
         console.log('data', res);
