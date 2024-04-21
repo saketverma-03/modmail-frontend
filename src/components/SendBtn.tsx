@@ -2,6 +2,7 @@ import { SaveIcon } from 'lucide-react';
 import { Embed } from '../store/types';
 import { Embed as ResEmbed } from '../types';
 import { TNode, useV2Store } from '../store/store';
+import { useLocalStorage } from '../hooks';
 
 function formateEmbed(E: Embed[]) {
     // console.log({ E });
@@ -82,9 +83,6 @@ export const SendBtn = () => {
     function handleOnSubmit() {
         const x = fn({ label: '', id: 'head', message: '' }, collection);
         const res = {
-            archiveChannelId: 'saket123',
-            modmailCategoryId: 'saket123',
-            aiSupport: false,
             initialMessage: {
                 message: {
                     content: headNodeData?.message, //TODO:
@@ -97,11 +95,12 @@ export const SendBtn = () => {
         };
         console.log('data', res);
         const myHeaders = new Headers();
+        const {getItem } = useLocalStorage('auth');
         myHeaders.append('accept', '*/*');
         myHeaders.append('Content-Type', 'application/json');
         myHeaders.append(
             'Authorization',
-            'Bearer 8RCfuP7F252GaLNadq0vhEWcmHhOsj'
+            'Bearer '+ getItem()
         );
         fetch('http://localhost:3000/editor/', {
             method: 'POST',
