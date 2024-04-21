@@ -4,7 +4,7 @@ export type Embed = {
     title?: string; // 0-246
     description?: string; // 0-4096
     url?: string;
-    color?: string;
+    color?: number;
 
     imageUrl?: string;
     thumbnailUrl?: string;
@@ -16,7 +16,7 @@ export type Embed = {
 };
 
 export type Attachments = {
-    id: strings;
+    id: string;
     title: string;
     url: string;
 };

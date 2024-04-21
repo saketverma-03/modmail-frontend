@@ -1,4 +1,3 @@
-import { retry } from 'wretch/middlewares';
 import { Embed as TEmbeds } from './store/types.ts';
 
 export type Embed = {
@@ -53,6 +52,7 @@ export type ModmailConfig = {
 export type MessageComponent = {
     message: SupportMessage;
     buttons: Button[]; // max 5
+    aiPrompt?: string;
     // define max limit 5 in this type
 };
 
@@ -114,8 +114,8 @@ export function mapResponse(b: Button[], parentId: string, node, embeds) {
             // embeds = [...embeds, ...newEmbes];
             console.log({ embeds });
         }
-        if (i.linkedComponent.button) {
-            mapResponse(i.linkedComponent.button, thisId, node, embeds);
+        if (i.linkedComponent.buttons) {
+            mapResponse(i.linkedComponent.buttons, thisId, node, embeds);
         }
     });
 
