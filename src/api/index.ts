@@ -32,9 +32,9 @@ export async function getConfigOfuser(api: Wretch) {
 }
 
 export async function getVerifyToken(api: Wretch, token: string) {
-    return api.get(`/verify?$token=${token}`).json();
+    return api.headers({"Authorization": `Bearer ${token}`}).get('/editor').json();
 }
 
 export async function postConfigUser(api: Wretch, data: unknown) {
-    return api.post('/editor');
+    return api.body(data).post('/editor').json();
 }

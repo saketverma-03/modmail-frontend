@@ -2,6 +2,7 @@ import { SaveIcon } from 'lucide-react';
 import { Embed } from '../store/types';
 import { Embed as ResEmbed } from '../types';
 import { TNode, useV2Store } from '../store/store';
+import { useLocalStorage } from '../hooks';
 
 function formateEmbed(E: Embed[]) {
     // console.log({ E });
@@ -11,17 +12,16 @@ function formateEmbed(E: Embed[]) {
             description: e.description,
             url: e.url,
             timestamp: e.timeStamp,
-            //@ts-ignore
             color: e.color,
             footer: {
                 text: e.footer || '',
                 iconURL: e.footerIconUrl,
             },
             image: {
-                url: e.imageUrl,
+                url: e.imageUrl || '',
             },
             thumbnail: {
-                url: e.thumbnailUrl,
+                url: e.thumbnailUrl || '',
             },
         };
     });
@@ -31,25 +31,21 @@ const useResObj = () => {
     const embeds = useV2Store((s) => s.embeds);
     const fn = (buttons: TNode, allBtns: TNode[]) => {
         const newData = allBtns.filter((c) => c.parentId === buttons.id);
+        const e = formateEmbed(
+            embeds.filter((e) => e.conNodeId === buttons.id)
+        );
         if (newData.length === 0) {
-            const e = formateEmbed(
-                embeds.filter((e) => e.conNodeId === buttons.id)
-            );
             return {
                 label: buttons?.label,
                 linkedComponent: {
                     message: {
                         content: buttons?.message,
+                        embeds: e,
                     },
-
-                    embeds: e,
                 },
             };
         }
 
-        const e = formateEmbed(
-            embeds.filter((e) => e.conNodeId === buttons.id)
-        );
         console.log({ e });
         const obj = {
             label: buttons?.label,
@@ -58,9 +54,8 @@ const useResObj = () => {
                     content: buttons?.message,
                     embeds: e,
                     attachments: buttons?.attachments,
-                    // embeds: embeds.filter((e) => e.conNodeId === data.id),
                 },
-                button: newData.map((item) => fn(item, allBtns)),
+                buttons: newData.map((item) => fn(item, allBtns)),
             },
         };
 
@@ -80,11 +75,17 @@ export const SendBtn = () => {
     );
     const [fn] = useResObj();
     function handleOnSubmit() {
-        const x = fn({ label: '', id: 'head', message: '' }, collection);
+        const x = fn(
+            {
+                label: '',
+                id: 'head',
+                message: '',
+                parentId: '',
+                attachments: [],
+            },
+            collection
+        );
         const res = {
-            archiveChannelId: 'saket123',
-            modmailCategoryId: 'saket123',
-            aiSupport: false,
             initialMessage: {
                 message: {
                     content: headNodeData?.message, //TODO:
@@ -92,17 +93,15 @@ export const SendBtn = () => {
                     attachments: headNodeData?.attachments,
                 },
 
-                buttons: x.linkedComponent.button,
+                buttons: x.linkedComponent.buttons,
             },
         };
         console.log('data', res);
         const myHeaders = new Headers();
+        const { getItem } = useLocalStorage('auth');
         myHeaders.append('accept', '*/*');
         myHeaders.append('Content-Type', 'application/json');
-        myHeaders.append(
-            'Authorization',
-            'Bearer 8RCfuP7F252GaLNadq0vhEWcmHhOsj'
-        );
+        myHeaders.append('Authorization', 'Bearer ' + getItem());
         fetch('http://localhost:3000/editor/', {
             method: 'POST',
             headers: myHeaders,

@@ -14,7 +14,7 @@ export default function Tabs({ parentId }: { parentId: string }) {
     if (subNodes.length === 0) {
         return (
             <button
-                className="flex gap-2 rounded-full border text-purple-300 hover:bg-purple-700 border-2 border-purple-600"
+                className="flex gap-2 rounded-full text-purple-300 hover:bg-purple-700 border-2 border-purple-600"
                 onClick={() => addNode(parentId)}
             >
                 <GitMergeIcon />
