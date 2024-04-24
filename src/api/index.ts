@@ -7,7 +7,7 @@ export async function getConfigOfuser(api: Wretch) {
     const node: TNode[] = [];
     const embeds: Embed[] = [];
 
-    const headEmbeds = res.data.initialMessage.message.embeds;
+    const headEmbeds = res.data.initialMessage.message.embeds as Embed[];
     if (headEmbeds) {
         headEmbeds.forEach((e) => {
             const temp = transformEmbeds(e, 'head');
@@ -36,5 +36,5 @@ export async function getVerifyToken(api: Wretch, token: string) {
 }
 
 export async function postConfigUser(api: Wretch, data: unknown) {
-    return api.post('/editor');
+    return api.url('/editor').post(data);
 }

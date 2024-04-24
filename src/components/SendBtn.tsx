@@ -1,7 +1,11 @@
-import { SaveIcon } from 'lucide-react';
+import { Loader2, SaveIcon } from 'lucide-react';
 import { Embed } from '../store/types';
 import { Embed as ResEmbed } from '../types';
 import { TNode, useV2Store } from '../store/store';
+import { useApi } from '../hooks';
+import { postConfigUser } from '../api';
+import { useMutation } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 function formateEmbed(E: Embed[]) {
     // console.log({ E });
@@ -78,8 +82,10 @@ export const SendBtn = () => {
     const embeds = useV2Store((s) =>
         s.embeds.filter((val) => val.conNodeId === 'head')
     );
+
+    const { api } = useApi()
     const [fn] = useResObj();
-    function handleOnSubmit() {
+    async function handleOnSubmit() {
         const x = fn({ label: '', id: 'head', message: '' }, collection);
         const res = {
             archiveChannelId: 'saket123',
@@ -95,28 +101,27 @@ export const SendBtn = () => {
                 buttons: x.linkedComponent.button,
             },
         };
-        console.log('data', res);
-        const myHeaders = new Headers();
-        myHeaders.append('accept', '*/*');
-        myHeaders.append('Content-Type', 'application/json');
-        myHeaders.append(
-            'Authorization',
-            'Bearer 8RCfuP7F252GaLNadq0vhEWcmHhOsj'
-        );
-        fetch('http://localhost:3000/editor/', {
-            method: 'POST',
-            headers: myHeaders,
-            body: JSON.stringify(res),
-        });
+        mutate(res)
+        // console.log('data', res);
     }
+
+    const { mutate, isLoading, isPending, } = useMutation({
+        mutationFn: async (res) => {
+            return await postConfigUser(api, res)
+        }
+    })
+    useEffect(() => { console.log("loading:::", isLoading) }, [isLoading])
 
     return (
         <>
             <button
                 onClick={handleOnSubmit}
-                className="flex gap-2 bg-primary hover:bg-primary/50"
+                className="flex fixed gap-2 bg-primary hover:bg-primary/50"
             >
-                Save <SaveIcon className="h-5 w-5 opacity-80" />
+                {
+
+                    isLoading || isPending ? <Loader2 className='animate-spin' /> : <SaveIcon className="h-5 w-5 opacity-80" />
+                } Save
             </button>
         </>
     );

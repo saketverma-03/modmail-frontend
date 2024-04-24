@@ -1,4 +1,3 @@
-import { retry } from 'wretch/middlewares';
 import { Embed as TEmbeds } from './store/types.ts';
 
 export type Embed = {
@@ -6,7 +5,7 @@ export type Embed = {
     description?: string; // 4096 character limit
     url?: string; // url validation
     timestamp?: string; // ISO8601 timestamp
-    color?: number; // 0x000000 - 0xFFFFFF
+    color?: string; // 0x000000 - 0xFFFFFF
     footer?: {
         text: string; // 2048 character limit
         iconURL?: string; // url validation
